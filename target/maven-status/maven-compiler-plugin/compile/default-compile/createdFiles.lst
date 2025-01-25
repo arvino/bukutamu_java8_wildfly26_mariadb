@@ -1,0 +1,3 @@
+com\example\entity\Tamu.class
+com\example\ejb\TamuEJB.class
+com\example\web\TamuBean.class
