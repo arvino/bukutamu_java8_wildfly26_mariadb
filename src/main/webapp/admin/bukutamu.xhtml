@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      
+<ui:composition template="/WEB-INF/template.xhtml">
+    <ui:define name="title">Manajemen Buku Tamu - Admin</ui:define>
+    
+    <ui:define name="content">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">Daftar Buku Tamu</h4>
+                <h:link outcome="/admin/dashboard" styleClass="btn btn-secondary btn-sm">
+                    <i class="fas fa-arrow-left me-2"></i>Kembali
+                </h:link>
+            </div>
+            <div class="card-body">
+                <h:form>
+                    <h:dataTable value="#{bukutamuBean.daftarBukutamu}" var="tamu"
+                               styleClass="table table-striped table-hover">
+                        <h:column>
+                            <f:facet name="header">Member</f:facet>
+                            #{tamu.member.nama}
+                        </h:column>
+                        
+                        <h:column>
+                            <f:facet name="header">Email</f:facet>
+                            #{tamu.member.email}
+                        </h:column>
+                        
+                        <h:column>
+                            <f:facet name="header">Pesan</f:facet>
+                            #{tamu.messages}
+                        </h:column>
+                        
+                        <h:column>
+                            <f:facet name="header">Foto</f:facet>
+                            <h:graphicImage value="/uploads/bukutamu/#{tamu.gambar}"
+                                          rendered="#{not empty tamu.gambar}"
+                                          width="100" styleClass="img-thumbnail"/>
+                        </h:column>
+                        
+                        <h:column>
+                            <f:facet name="header">Tanggal</f:facet>
+                            <h:outputText value="#{tamu.createdAt}">
+                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+                            </h:outputText>
+                        </h:column>
+                        
+                        <h:column>
+                            <f:facet name="header">Aksi</f:facet>
+                            <h:commandButton value="Hapus" 
+                                           action="#{bukutamuBean.delete(tamu.id)}"
+                                           styleClass="btn btn-danger btn-sm"
+                                           onclick="return confirm('Yakin ingin menghapus data ini?');"/>
+                        </h:column>
+                    </h:dataTable>
+                </h:form>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>
+</html> 

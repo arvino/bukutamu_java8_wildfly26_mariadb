@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      
+<ui:composition template="/WEB-INF/template.xhtml">
+    <ui:define name="title">Dashboard Admin - Buku Tamu</ui:define>
+    
+    <ui:define name="content">
+        <!-- Statistik -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card bg-primary text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Member</h5>
+                        <h2>#{adminBean.totalMember}</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-success text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Buku Tamu</h5>
+                        <h2>#{adminBean.totalBukutamu}</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-info text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Buku Tamu Hari Ini</h5>
+                        <h2>#{adminBean.bukutamuHariIni}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Menu Navigasi -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <h:link outcome="/admin/members" styleClass="card text-decoration-none">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="fas fa-users me-2"></i>Manajemen Member
+                        </h5>
+                        <p class="card-text text-muted">Kelola data member, lihat aktivitas, dan hapus member</p>
+                    </div>
+                </h:link>
+            </div>
+            <div class="col-md-6">
+                <h:link outcome="/admin/bukutamu" styleClass="card text-decoration-none">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="fas fa-book me-2"></i>Manajemen Buku Tamu
+                        </h5>
+                        <p class="card-text text-muted">Lihat semua buku tamu dan moderasi konten</p>
+                    </div>
+                </h:link>
+            </div>
+        </div>
+        
+        <!-- Aktivitas Terbaru -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Aktivitas Terbaru</h5>
+            </div>
+            <div class="card-body">
+                <h:dataTable value="#{bukutamuBean.daftarBukutamu}" var="tamu"
+                           styleClass="table table-striped" rows="5">
+                    <h:column>
+                        <f:facet name="header">Member</f:facet>
+                        #{tamu.member.nama}
+                    </h:column>
+                    
+                    <h:column>
+                        <f:facet name="header">Pesan</f:facet>
+                        #{tamu.messages}
+                    </h:column>
+                    
+                    <h:column>
+                        <f:facet name="header">Tanggal</f:facet>
+                        <h:outputText value="#{tamu.createdAt}">
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+                        </h:outputText>
+                    </h:column>
+                </h:dataTable>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>
+</html> 

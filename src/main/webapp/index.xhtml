@@ -1,137 +1,97 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-<h:head>
-    <title>Buku Tamu</title>
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" 
-          rel="stylesheet" />
-    <!-- Custom CSS -->
-    <style>
-        .form-container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-        }
-        .table-container {
-            max-width: 800px;
-            margin: 20px auto;
-        }
-    </style>
-</h:head>
-<h:body>
-    <div class="container">
-        <div class="form-container">
-            <h2 class="mb-4">Buku Tamu</h2>
-            <h:form id="formTamu" class="needs-validation">
-                <div class="mb-3">
-                    <h:outputLabel for="nama" value="Nama" class="form-label" />
-                    <h:inputText id="nama" value="#{tamuBean.tamu.nama}" 
-                               class="form-control"
-                               required="true"
-                               requiredMessage="Nama wajib diisi" />
-                    <h:message for="nama" class="text-danger" />
-                </div>
-
-                <div class="mb-3">
-                    <h:outputLabel for="nomorHp" value="Nomor HP" class="form-label" />
-                    <h:inputText id="nomorHp" value="#{tamuBean.tamu.nomorHp}" 
-                               class="form-control"
-                               required="true"
-                               requiredMessage="Nomor HP wajib diisi" />
-                    <h:message for="nomorHp" class="text-danger" />
-                </div>
-
-                <div class="mb-3">
-                    <h:outputLabel for="email" value="Email" class="form-label" />
-                    <h:inputText id="email" value="#{tamuBean.tamu.email}" 
-                               class="form-control"
-                               required="true"
-                               requiredMessage="Email wajib diisi" />
-                    <h:message for="email" class="text-danger" />
-                </div>
-
-                <div class="mb-3">
-                    <h:outputLabel for="pesan" value="Pesan" class="form-label" />
-                    <h:inputTextarea id="pesan" value="#{tamuBean.tamu.pesan}" 
-                                   class="form-control" />
-                </div>
-
-                <h:commandButton value="Simpan" action="#{tamuBean.simpan}" 
-                               class="btn btn-primary" />
-            </h:form>
-        </div>
-
-        <div class="table-container">
-            <h3 class="mb-4">Daftar Tamu</h3>
-            <h:form>
-                <div class="table-responsive">
-                    <h:dataTable value="#{tamuBean.daftarTamu}" var="tamu" 
-                               class="table table-striped table-hover">
-                        <h:column>
-                            <f:facet name="header">Nama</f:facet>
-                            #{tamu.nama}
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">Nomor HP</f:facet>
-                            #{tamu.nomorHp}
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">Email</f:facet>
-                            #{tamu.email}
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">Pesan</f:facet>
-                            #{tamu.pesan}
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">Tanggal</f:facet>
-                            <h:outputText value="#{tamu.tanggalKunjungan}">
-                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
-                            </h:outputText>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">Aksi</f:facet>
-                            <h:commandButton value="Hapus" 
-                                           action="#{tamuBean.hapus(tamu.id)}"
-                                           class="btn btn-danger btn-sm"
-                                           onclick="return confirm('Yakin ingin menghapus data ini?');" />
-                        </h:column>
-                    </h:dataTable>
-                </div>
-            </h:form>
-        </div>
-    </div>
-
-    <!-- Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      
+<ui:composition template="/WEB-INF/template.xhtml">
+    <ui:define name="title">Beranda - Buku Tamu</ui:define>
     
-    <script>
-        $(document).ready(function() {
-            // Form validation
-            (function() {
-                'use strict'
-                var forms = document.querySelectorAll('.needs-validation')
-                Array.prototype.slice.call(forms).forEach(function(form) {
-                    form.addEventListener('submit', function(event) {
-                        if (!form.checkValidity()) {
-                            event.preventDefault()
-                            event.stopPropagation()
-                        }
-                        form.classList.add('was-validated')
-                    }, false)
-                })
-            })()
+    <ui:define name="content">
+        <!-- Hero Section -->
+        <div class="py-5 text-center">
+            <h1 class="display-4">Selamat Datang di Buku Tamu</h1>
+            <p class="lead">Aplikasi buku tamu digital berbasis Java EE dengan JSF dan REST API</p>
             
-            // Tambahkan tooltip untuk tombol
-            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-                return new bootstrap.Tooltip(tooltipTriggerEl)
-            })
-        });
-    </script>
-</h:body>
+            <div class="mt-4">
+                <h:panelGroup rendered="#{!loginBean.loggedIn}">
+                    <h:link outcome="register" styleClass="btn btn-primary btn-lg me-3">
+                        <i class="fas fa-user-plus me-2"></i>Daftar Sekarang
+                    </h:link>
+                    <h:link outcome="login" styleClass="btn btn-outline-primary btn-lg">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                    </h:link>
+                </h:panelGroup>
+                
+                <h:panelGroup rendered="#{loginBean.loggedIn}">
+                    <h:link outcome="#{loginBean.admin ? '/admin/dashboard' : '/member/dashboard'}" 
+                            styleClass="btn btn-primary btn-lg">
+                        <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                    </h:link>
+                </h:panelGroup>
+            </div>
+        </div>
+        
+        <!-- Features -->
+        <div class="row g-4 py-5">
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-users fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">Multi User</h5>
+                        <p class="card-text">Mendukung multiple user dengan role admin dan member</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-image fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">Upload Foto</h5>
+                        <p class="card-text">Submit buku tamu dengan foto sebagai kenang-kenangan</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-code fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">REST API</h5>
+                        <p class="card-text">Dilengkapi REST API untuk integrasi dengan aplikasi lain</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Latest Entries -->
+        <div class="card mt-5">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Buku Tamu Terbaru</h5>
+            </div>
+            <div class="card-body">
+                <h:dataTable value="#{bukutamuBean.daftarBukutamu}" var="tamu"
+                           styleClass="table table-striped" rows="5">
+                    <h:column>
+                        <f:facet name="header">Member</f:facet>
+                        #{tamu.member.nama}
+                    </h:column>
+                    
+                    <h:column>
+                        <f:facet name="header">Pesan</f:facet>
+                        #{tamu.messages}
+                    </h:column>
+                    
+                    <h:column>
+                        <f:facet name="header">Tanggal</f:facet>
+                        <h:outputText value="#{tamu.createdAt}">
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+                        </h:outputText>
+                    </h:column>
+                </h:dataTable>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>
 </html>
