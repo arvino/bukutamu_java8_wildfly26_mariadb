@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      
+<ui:composition template="/WEB-INF/template.xhtml">
+    <ui:define name="title">Beranda - Buku Tamu</ui:define>
+    
+    <ui:define name="content">
+        <!-- Hero Section -->
+        <div class="py-5 text-center">
+            <h1 class="display-4">Selamat Datang di Buku Tamu</h1>
+            <p class="lead">Aplikasi buku tamu digital berbasis Java EE dengan JSF dan REST API</p>
+            
+            <div class="mt-4">
+                <h:panelGroup rendered="#{!loginBean.loggedIn}">
+                    <h:link outcome="register" styleClass="btn btn-primary btn-lg me-3">
+                        <i class="fas fa-user-plus me-2"></i>Daftar Sekarang
+                    </h:link>
+                    <h:link outcome="login" styleClass="btn btn-outline-primary btn-lg">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                    </h:link>
+                </h:panelGroup>
+                
+                <h:panelGroup rendered="#{loginBean.loggedIn}">
+                    <h:link outcome="#{loginBean.admin ? '/admin/dashboard' : '/member/dashboard'}" 
+                            styleClass="btn btn-primary btn-lg">
+                        <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                    </h:link>
+                </h:panelGroup>
+            </div>
+        </div>
+        
+        <!-- Features -->
+        <div class="row g-4 py-5">
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-users fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">Multi User</h5>
+                        <p class="card-text">Mendukung multiple user dengan role admin dan member</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-image fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">Upload Foto</h5>
+                        <p class="card-text">Submit buku tamu dengan foto sebagai kenang-kenangan</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-code fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">REST API</h5>
+                        <p class="card-text">Dilengkapi REST API untuk integrasi dengan aplikasi lain</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Latest Entries -->
+        <div class="card mt-5">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Buku Tamu Terbaru</h5>
+            </div>
+            <div class="card-body">
+                <h:dataTable value="#{bukutamuBean.daftarBukutamu}" var="tamu"
+                           styleClass="table table-striped" rows="5">
+                    <h:column>
+                        <f:facet name="header">Member</f:facet>
+                        #{tamu.member.nama}
+                    </h:column>
+                    
+                    <h:column>
+                        <f:facet name="header">Pesan</f:facet>
+                        #{tamu.messages}
+                    </h:column>
+                    
+                    <h:column>
+                        <f:facet name="header">Tanggal</f:facet>
+                        <h:outputText value="#{tamu.createdAt}">
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+                        </h:outputText>
+                    </h:column>
+                </h:dataTable>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>
+</html>

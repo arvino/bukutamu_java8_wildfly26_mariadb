@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      
+<ui:composition template="/WEB-INF/template.xhtml">
+    <ui:define name="title">Update Profil - Buku Tamu</ui:define>
+    
+    <ui:define name="content">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">Update Profil</h4>
+                        <h:link outcome="/member/dashboard" styleClass="btn btn-secondary btn-sm">
+                            <i class="fas fa-arrow-left me-2"></i>Kembali
+                        </h:link>
+                    </div>
+                    <div class="card-body">
+                        <h:form id="profileForm">
+                            <h:messages globalOnly="true" styleClass="alert alert-danger"/>
+                            
+                            <div class="mb-3">
+                                <h:outputLabel for="nama" value="Nama Lengkap" styleClass="form-label"/>
+                                <h:inputText id="nama" value="#{loginBean.loggedInMember.nama}"
+                                           styleClass="form-control" required="true"
+                                           requiredMessage="Nama wajib diisi"/>
+                                <h:message for="nama" styleClass="text-danger"/>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <h:outputLabel for="email" value="Email" styleClass="form-label"/>
+                                <h:inputText id="email" value="#{loginBean.loggedInMember.email}"
+                                           styleClass="form-control" readonly="true"/>
+                                <small class="text-muted">Email tidak dapat diubah</small>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <h:outputLabel for="phone" value="Nomor HP" styleClass="form-label"/>
+                                <h:inputText id="phone" value="#{loginBean.loggedInMember.phone}"
+                                           styleClass="form-control" required="true"
+                                           requiredMessage="Nomor HP wajib diisi"/>
+                                <h:message for="phone" styleClass="text-danger"/>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <h:outputLabel for="password" value="Password Baru" styleClass="form-label"/>
+                                <h:inputSecret id="password" value="#{loginBean.password}"
+                                             styleClass="form-control"/>
+                                <small class="text-muted">Kosongkan jika tidak ingin mengubah password</small>
+                            </div>
+                            
+                            <div class="d-grid gap-2">
+                                <h:commandButton value="Update Profil" 
+                                               action="#{loginBean.updateProfile}"
+                                               styleClass="btn btn-primary"/>
+                            </div>
+                        </h:form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>
+</html> 
