@@ -266,3 +266,138 @@ standalone.bat
 ```batch
 set "JAVA_OPTS=-Xms512m -Xmx1024m"
 ```
+
+## Struktur File Penting
+
+### 1. Konfigurasi
+```
+src/main/webapp/WEB-INF/
+├── web.xml                 # Konfigurasi servlet & JSF
+├── jboss-web.xml          # Konfigurasi context root
+├── faces-config.xml       # Konfigurasi JSF
+└── template.xhtml         # Template utama aplikasi
+```
+
+### 2. Komponen UI
+```
+src/main/webapp/
+├── WEB-INF/components/    # Reusable components
+│   ├── messages.xhtml     # Global messages
+│   └── loading.xhtml      # Loading spinner
+├── error/                 # Error pages
+│   ├── 404.xhtml
+│   └── 500.xhtml
+├── index.xhtml           # Landing page
+├── login.xhtml          # Login form
+└── register.xhtml       # Registration form
+```
+
+### 3. Script Deployment
+```
+├── deploy.bat           # Script deploy Windows
+├── deploy.sh           # Script deploy Linux/Mac
+└── wildfly.bat         # Script start/stop WildFly
+```
+
+## Troubleshooting Detail
+
+### 1. Error 404 - Not Found
+a. Periksa Context Root
+- Pastikan file jboss-web.xml ada dan berisi:
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<jboss-web>
+    <context-root>/bukutamu</context-root>
+</jboss-web>
+```
+
+b. Periksa Deployment
+```batch
+dir "C:\wildfly-26.1.3.Final\standalone\deployments"
+```
+Harus ada file:
+- bukutamu.war
+- bukutamu.war.deployed
+
+c. Periksa Log Server
+```batch
+type "C:\wildfly-26.1.3.Final\standalone\log\server.log"
+```
+
+### 2. Error Database Connection
+a. Verifikasi Datasource di standalone.xml:
+```xml
+<datasource jndi-name="java:/BukuTamuDS" pool-name="BukuTamuDS" enabled="true">
+    <connection-url>jdbc:mysql://localhost:3306/bukutamu?useSSL=false&amp;serverTimezone=UTC</connection-url>
+    <driver>mysql</driver>
+    <security>
+        <user-name>root</user-name>
+        <password>root</password>
+    </security>
+</datasource>
+```
+
+b. Test Koneksi MySQL:
+```batch
+mysql -u root -p -e "SELECT 1"
+```
+
+### 3. Error JSF Components
+a. Periksa Template
+- Pastikan semua file komponen ada:
+  - /WEB-INF/template.xhtml
+  - /WEB-INF/components/messages.xhtml
+  - /WEB-INF/components/loading.xhtml
+
+b. Periksa Dependencies di pom.xml
+```xml
+<dependency>
+    <groupId>javax.faces</groupId>
+    <artifactId>javax.faces-api</artifactId>
+    <version>2.3</version>
+</dependency>
+```
+
+### 4. Error Deployment
+a. Clean Deployment
+```batch
+del /F /Q "C:\wildfly-26.1.3.Final\standalone\deployments\bukutamu.*"
+```
+
+b. Restart WildFly Clean
+```batch
+wildfly.bat stop
+taskkill /F /IM java.exe
+wildfly.bat start
+```
+
+### 5. Permission Issues
+a. Folder Uploads
+```batch
+mkdir "C:\wildfly-26.1.3.Final\standalone\deployments\bukutamu.war\uploads"
+icacls "C:\wildfly-26.1.3.Final\standalone\deployments\bukutamu.war\uploads" /grant "Everyone":(OI)(CI)F
+```
+
+b. Log Folder
+```batch
+icacls "C:\wildfly-26.1.3.Final\standalone\log" /grant "Everyone":(OI)(CI)F
+```
+
+## Quick Commands
+
+### 1. Build & Deploy
+```batch
+mvn clean package
+copy /Y target\bukutamu.war "C:\wildfly-26.1.3.Final\standalone\deployments\"
+```
+
+### 2. Server Control
+```batch
+wildfly.bat start    # Start server
+wildfly.bat stop     # Stop server
+```
+
+### 3. Log Monitoring
+```batch
+powershell Get-Content -Path "C:\wildfly-26.1.3.Final\standalone\log\server.log" -Wait
+```
