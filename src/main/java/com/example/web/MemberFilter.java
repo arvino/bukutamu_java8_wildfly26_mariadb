@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebFilter("/member/*")
+@WebFilter({"/member/*", "/admin/*"})
 public class MemberFilter implements Filter {
     
     @Inject
@@ -20,8 +20,17 @@ public class MemberFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
         
+        String path = req.getRequestURI();
+        
+        // Cek apakah user sudah login
         if (!loginBean.isLoggedIn()) {
             res.sendRedirect(req.getContextPath() + "/login.xhtml");
+            return;
+        }
+        
+        // Cek akses ke halaman admin
+        if (path.contains("/admin/") && !loginBean.isAdmin()) {
+            res.sendRedirect(req.getContextPath() + "/error/403.xhtml");
             return;
         }
         
