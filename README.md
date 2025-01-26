@@ -155,3 +155,114 @@ src/
 - Email: arvinozulka@gmail.com 
 - Website: https://www.arvino.my.id/
 - GitHub: https://github.com/arvino
+
+## Deployment di Windows 11
+
+### 1. Persiapan Environment
+- Install JDK 8 (misal di C:\Program Files\Java\jdk1.8.0_xxx)
+- Install Maven (tambahkan ke PATH)
+- Download & Extract WildFly 26.1.3.Final (misal di C:\wildfly-26.1.3.Final)
+- Install MySQL 8.0
+
+### 2. Konfigurasi WildFly
+a. Buat user management (buka Command Prompt sebagai Administrator):
+```batch
+cd C:\wildfly-26.1.3.Final\bin
+add-user.bat
+```
+- Pilih: a) Management User
+- Username: admin
+- Password: admin123
+- Groups: leave blank
+- Yes untuk pertanyaan terakhir
+
+b. Setup MySQL Driver:
+1. Download mysql-connector-java-8.0.x.jar
+2. Buat folder struktur:
+```batch
+C:\wildfly-26.1.3.Final\modules\system\layers\base\com\mysql\main\
+```
+3. Copy mysql-connector-java-8.0.x.jar ke folder tersebut
+4. Buat file module.xml di folder yang sama:
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<module xmlns="urn:jboss:module:1.5" name="com.mysql">
+    <resources>
+        <resource-root path="mysql-connector-java-8.0.x.jar"/>
+    </resources>
+    <dependencies>
+        <module name="javax.api"/>
+        <module name="javax.transaction.api"/>
+    </dependencies>
+</module>
+```
+
+### 3. Setup Database
+a. Buka MySQL Command Line atau MySQL Workbench:
+```sql
+CREATE DATABASE bukutamu;
+```
+
+b. Import schema dan data awal:
+```batch
+mysql -u root -p bukutamu < src\main\resources\db\init.sql
+```
+
+### 4. Deploy Aplikasi
+
+#### Metode 1: Menggunakan Script
+1. Edit file deploy.bat, sesuaikan path WildFly:
+```batch
+set WILDFLY_HOME=C:\wildfly-26.1.3.Final
+```
+
+2. Jalankan script deploy:
+```batch
+deploy.bat
+```
+
+#### Metode 2: Manual Deploy
+1. Build project:
+```batch
+mvn clean package
+```
+
+2. Copy file WAR:
+```batch
+copy /Y target\bukutamu.war "C:\wildfly-26.1.3.Final\standalone\deployments\"
+```
+
+3. Start WildFly:
+```batch
+cd C:\wildfly-26.1.3.Final\bin
+standalone.bat
+```
+
+### 5. Akses Aplikasi
+- Web Application: http://localhost:8080/bukutamu
+- Admin Console: http://localhost:9990
+
+### 6. Login Admin Default
+- Email: admin@bukutamu.com
+- Password: admin123
+
+### 7. Troubleshooting
+1. Port Conflicts
+- Pastikan port 8080 dan 9990 tidak digunakan
+- Cek dengan command: `netstat -ano | findstr "8080"`
+- Jika terpakai, stop service yang menggunakan atau ubah port di standalone.xml
+
+2. Permission Issues
+- Jalankan Command Prompt sebagai Administrator
+- Pastikan folder uploads di webapp memiliki write permission
+
+3. Database Connection
+- Verifikasi kredensial database di standalone.xml
+- Test koneksi database menggunakan tools seperti MySQL Workbench
+- Cek log error di C:\wildfly-26.1.3.Final\standalone\log\server.log
+
+4. Memory Issues
+- Edit standalone.bat, tambahkan memory settings:
+```batch
+set "JAVA_OPTS=-Xms512m -Xmx1024m"
+```

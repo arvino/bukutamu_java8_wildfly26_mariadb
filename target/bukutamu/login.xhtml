@@ -16,11 +16,9 @@
                     </div>
                     <div class="card-body">
                         <h:form>
-                            <h:messages globalOnly="true" styleClass="alert alert-danger"/>
-                            
                             <div class="mb-3">
                                 <h:outputLabel for="email" value="Email" styleClass="form-label"/>
-                                <h:inputText id="email" value="#{loginBean.email}" 
+                                <h:inputText id="email" value="#{loginBean.email}"
                                            styleClass="form-control" required="true"
                                            requiredMessage="Email wajib diisi"/>
                                 <h:message for="email" styleClass="text-danger"/>
@@ -28,21 +26,20 @@
                             
                             <div class="mb-3">
                                 <h:outputLabel for="password" value="Password" styleClass="form-label"/>
-                                <h:inputSecret id="password" value="#{loginBean.password}" 
+                                <h:inputSecret id="password" value="#{loginBean.password}"
                                              styleClass="form-control" required="true"
                                              requiredMessage="Password wajib diisi"/>
                                 <h:message for="password" styleClass="text-danger"/>
                             </div>
                             
-                            <div class="d-grid gap-2">
-                                <h:commandButton value="Login" action="#{loginBean.login}" 
+                            <div class="d-grid">
+                                <h:commandButton value="Login" action="#{loginBean.login}"
                                                styleClass="btn btn-primary"/>
                             </div>
                         </h:form>
                         
                         <div class="text-center mt-3">
                             <p>Belum punya akun? <h:link outcome="register" value="Daftar disini"/></p>
-                            <p><h:link outcome="index" value="Kembali ke Beranda"/></p>
                         </div>
                     </div>
                 </div>
